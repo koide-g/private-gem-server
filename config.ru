@@ -11,7 +11,7 @@ use Rack::Session::Pool, expire_after: 1000 # sec
 use Rack::Protection
 
 use Rack::Auth::Basic, "GemInAbox" do |username, password|
-  ENV['BASIC_AUTH_USER'] == user && ENV['BASIC_AUTH_PASSWORD'] == user 
+  ENV['BASIC_AUTH_USER'] == username && ENV['BASIC_AUTH_PASSWORD'] == password 
 end
 
 run Geminabox::Server
