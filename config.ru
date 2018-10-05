@@ -1,6 +1,6 @@
 require "geminabox"
 
-Geminabox.data = "/data" # ... or wherever
+Geminabox.data = "/tmp" # ... or wherever
 
 # Use Rack::Protection to prevent XSS and CSRF vulnerability if your geminabox server is open public.
 # Rack::Protection requires a session middleware, choose your favorite one such as Rack::Session::Memcache.
