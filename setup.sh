@@ -28,9 +28,7 @@ echo 'export RBENV_ROOT="${HOME}/.rbenv"'                       >> $HOME/.bash_p
 echo 'export PATH="${RBENV_ROOT}/bin:$PATH"'                    >> $HOME/.bash_profile
 echo 'export PATH="${RBENV_ROOT}/plugins/ruby-build/bin:$PATH"' >> $HOME/.bash_profile
 echo 'eval "$(rbenv init -)"'                                   >> $HOME/.bash_profile
-
 source $HOME/.bash_profile
-# echo $PATH
 
 echo "Install ruby v2.5.1"
 rbenv install 2.5.1
