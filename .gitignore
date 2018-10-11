@@ -3,5 +3,7 @@
 
 /data
 !/data/.keep
+/var/geminabox-data
+!/var/geminabox-data/.keep
 
 .vagrant
