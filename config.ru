@@ -1,6 +1,6 @@
 require "geminabox"
 
-Geminabox.data = "/tmp" # ... or wherever
+Geminabox.data = "var/geminabox-data" # ... or wherever
 
 # Use Rack::Protection to prevent XSS and CSRF vulnerability if your geminabox server is open public.
 # Rack::Protection requires a session middleware, choose your favorite one such as Rack::Session::Memcache.
@@ -10,9 +10,10 @@ Geminabox.data = "/tmp" # ... or wherever
 use Rack::Session::Pool, expire_after: 1000 # sec
 use Rack::Protection
 
-use Rack::Auth::Basic, "GemInAbox" do |username, password|
-  ENV['BASIC_AUTH_USER'] == username && ENV['BASIC_AUTH_PASSWORD'] == password 
+if ENV['BASIC_AUTH_USER'] && ENV['BASIC_AUTH_PASSWORD']
+  use Rack::Auth::Basic, "GemInAbox" do |username, password|
+    ENV['BASIC_AUTH_USER'] == username && ENV['BASIC_AUTH_PASSWORD'] == password
+  end
 end
 
 run Geminabox::Server
-
