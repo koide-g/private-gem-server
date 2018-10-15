@@ -1,0 +1,17 @@
+localhost: &localhost
+  /:
+    - 127.0.0.1
+    - 192.168.10.0/24
+
+development:
+  <<: *localhost
+
+test:
+  <<: *localhost
+
+# set IP addresses
+# % heroku config:set IP_ADDRESS_WHITELIST="XXX.XXX.XXX.XXX"
+
+production: &production
+  /:
+    <%= ENV['IP_ADDRESS_WHITELIST']&.split(" ") %>
