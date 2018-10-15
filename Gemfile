@@ -7,4 +7,4 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'geminabox'
 gem 'rack-attack', '~> 5.4', '>= 5.4.1'
-gem 'thin'
+
