@@ -44,9 +44,9 @@ class SkipBasicAuth < Rack::Auth::Basic
         ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
         request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
       }
-      @app.call(env)
-    else
       super
+    else
+      @app.call(env)
     end
   end
 end
