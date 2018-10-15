@@ -52,19 +52,11 @@ class SkipBasicAuth < Rack::Auth::Basic
 end
 
 if ENV['BASIC_AUTH_USER'] && ENV['BASIC_AUTH_PASSWORD']
-
   # 社内アクセスは BASIC認証スキップ
   use SkipBasicAuth, "GemInAbox" do |username, password|
     ENV['BASIC_AUTH_USER'] == username && ENV['BASIC_AUTH_PASSWORD'] == password
   end
 end
-
-# Rack::Attack.safelist('社内アクセス') do |request|
-#   IPList.office_ip.any? do |path, ip_addresses|
-#     ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
-#     request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
-#   end
-# end
 
 Rack::Attack.safelist('社外リモートアクセス') do |request|
   IPList.remote_office_ip.any? do |path, ip_addresses|
@@ -73,7 +65,5 @@ Rack::Attack.safelist('社外リモートアクセス') do |request|
   end
 end
 
-
 run Geminabox::Server
-
 
