@@ -61,7 +61,7 @@ end
 Rack::Attack.safelist('社外リモートアクセス') do |request|
   IPList.remote_office_ip.any? do |path, ip_addresses|
     ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
-    request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
+    request.path.match(/^#{path}/) && ip_addrs.any? { |ip_addr| ip_addr.include?(request.ip) }
   end
 end
 
