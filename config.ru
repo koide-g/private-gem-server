@@ -52,7 +52,7 @@ class SkipBasicAuth < Rack::Auth::Basic
   end
 end
 
-Rack::Attack.block_list('許可されない社外アクセス') do |request|
+Rack::Attack.blocklist('許可されない社外アクセス') do |request|
   (IPList.office_ip + IPList.remote_office_ip).any? do |path, ip_addresses|
     ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
     request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
