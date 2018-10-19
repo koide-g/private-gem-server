@@ -40,30 +40,31 @@ end
 class SkipBasicAuth < Rack::Auth::Basic
   def call(env)
     request = Rack::Request.new(env)
-    if IPList.office_ip.any? { |path, ip_addresses|
+    # 社外リモート以外はBASIC認証要求しない
+    if IPList.remote_office_ip.any? { |path, ip_addresses|
         ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
         request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
       }
-      super
-    else
       @app.call(env)
+    else
+      super
     end
   end
 end
 
+Rack::Attack.block_list('許可されない社外アクセス') do |request|
+  (IPList.office_ip + IPList.remote_office_ip).any? do |path, ip_addresses|
+    ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
+    request.path.match(/^#{path}/) && ip_addrs.none? { |ip_addr| ip_addr.include?(request.ip) }
+  end
+end
+
 if ENV['BASIC_AUTH_USER'] && ENV['BASIC_AUTH_PASSWORD']
-  # 社内アクセスは BASIC認証スキップ
   use SkipBasicAuth, "GemInAbox" do |username, password|
     ENV['BASIC_AUTH_USER'] == username && ENV['BASIC_AUTH_PASSWORD'] == password
   end
 end
 
-Rack::Attack.safelist('社外リモートアクセス') do |request|
-  IPList.remote_office_ip.any? do |path, ip_addresses|
-    ip_addrs = ip_addresses.map { |ip_address| IPAddr.new(ip_address) }
-    request.path.match(/^#{path}/) && ip_addrs.any? { |ip_addr| ip_addr.include?(request.ip) }
-  end
-end
 
 run Geminabox::Server
 
