@@ -2,8 +2,11 @@ require "geminabox"
 require "rack/attack"
 require 'yaml'
 require 'erb'
+require 'fileutils'
 
 Geminabox.data = ENV['GEMINABOX_DATA_DIR'] || "var/geminabox-data"
+
+FileUtils.mkdir_p Geminabox.data unless Dir.exist? Geminabox.data
 
 # Use Rack::Protection to prevent XSS and CSRF vulnerability if your geminabox server is open public.
 # Rack::Protection requires a session middleware, choose your favorite one such as Rack::Session::Memcache.
